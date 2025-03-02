@@ -14,7 +14,7 @@ class HomeControllerTest {
 
     // intial state
     @BeforeEach
-    void setUp() {
+    void set_up() {
         homeController = new HomeController();
         // 3 dummy movies
         homeController.allMovies = List.of(
@@ -26,9 +26,9 @@ class HomeControllerTest {
         homeController.observableMovies.addAll(homeController.allMovies);
     }
 
-    // Testcases für die Aufsteigende Sortierung
+    // Testcase für die Aufsteigende Sortierung
     @Test
-    void sortMoviesAscending() {
+    void sort_movies_ascending() {
         homeController.sortMovies(true); // Filme in Aufsteigender Reihefolge sortieren
         // Absteigende Sortierung überprüfen
         assertEquals("Avatar", homeController.observableMovies.get(0).getTitle());
@@ -38,7 +38,7 @@ class HomeControllerTest {
 
     // Testcase für die Absteigender Sortierung
     @Test
-    void sortMoviesDescending() {
+    void sort_movies_descending() {
         homeController.sortMovies(false); // Filme in Absteigender Reihefolge sortieren
         // Absteigende Sortierung überprüfen
         assertEquals("Zootopia", homeController.observableMovies.get(0).getTitle());
