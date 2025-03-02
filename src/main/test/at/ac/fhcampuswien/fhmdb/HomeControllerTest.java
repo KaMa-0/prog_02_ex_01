@@ -1,64 +1,51 @@
 package at.ac.fhcampuswien.fhmdb;
 
-import at.ac.fhcampuswien.fhmdb.models.Genres;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HomeControllerTest {
-    // initialize homeController for testing
-    private static HomeController homeController;
 
-    @BeforeAll
-    static void init() {
+    private HomeController homeController;
+
+    // intial state
+    @BeforeEach
+    void setUp() {
         homeController = new HomeController();
-        homeController.initialize(null, null);
+        // 3 dummy movies
+        homeController.allMovies = List.of(
+                new Movie("Zootopia", "A city of animals", List.of()),
+                new Movie("Interstellar", "A space adventure", List.of()),
+                new Movie("Avatar", "A marine on an alien planet", List.of())
+        );
+        // Filme zu Liste hinzufügen
+        homeController.observableMovies.addAll(homeController.allMovies);
     }
 
+    // Testcases für die Aufsteigende Sortierung
     @Test
-    void list_sorted_in_ascending_order() {
-        homeController.sortMovies(true);
-        ArrayList<Movie> expected = new ArrayList<>();
-        expected.add(new Movie(
-                "Finding Nemo",
-                "After his son is captured in the Great Barrier Reef and taken to Sydney, a timid clownfish sets out on a journey to bring him home.",
-                Arrays.asList(Genres.ANIMATION, Genres.FAMILY, Genres.ADVENTURE, Genres.COMEDY)));
-        expected.add(new Movie(
-                "Forrest Gump",
-                "The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold through the perspective of an Alabama man with an IQ of 75.",
-                Arrays.asList(Genres.DRAMA, Genres.ROMANCE, Genres.COMEDY)));
-        expected.add(new Movie(
-                "Inception",
-                "A thief who enters the dreams of others to steal secrets from their subconscious is given a task to plant an idea into the mind of a CEO.",
-                Arrays.asList(Genres.ACTION, Genres.SCIENCE_FICTION, Genres.THRILLER)));
-
-        assertEquals(expected, homeController.observableMovies);
+    void sortMoviesAscending() {
+        homeController.sortMovies(true); // Filme in Aufsteigender Reihefolge sortieren
+        // Absteigende Sortierung überprüfen
+        assertEquals("Avatar", homeController.observableMovies.get(0).getTitle());
+        assertEquals("Interstellar", homeController.observableMovies.get(1).getTitle());
+        assertEquals("Zootopia", homeController.observableMovies.get(2).getTitle());
     }
 
+    // Testcase für die Absteigender Sortierung
     @Test
-    void list_sorted_in_descending_order() {
-        homeController.sortMovies(true);
-        ArrayList<Movie> expected = new ArrayList<>();
-        expected.add(new Movie(
-                "Inception",
-                "A thief who enters the dreams of others to steal secrets from their subconscious is given a task to plant an idea into the mind of a CEO.",
-                Arrays.asList(Genres.ACTION, Genres.SCIENCE_FICTION, Genres.THRILLER)));
-        expected.add(new Movie(
-                "Forrest Gump",
-                "The presidencies of Kennedy and Johnson, the Vietnam War, the Watergate scandal and other historical events unfold through the perspective of an Alabama man with an IQ of 75.",
-                Arrays.asList(Genres.DRAMA, Genres.ROMANCE, Genres.COMEDY)));
-        expected.add(new Movie(
-                "Finding Nemo",
-                "After his son is captured in the Great Barrier Reef and taken to Sydney, a timid clownfish sets out on a journey to bring him home.",
-                Arrays.asList(Genres.ANIMATION, Genres.FAMILY, Genres.ADVENTURE, Genres.COMEDY)));
-
-        assertEquals(expected, homeController.observableMovies);
+    void sortMoviesDescending() {
+        homeController.sortMovies(false); // Filme in Absteigender Reihefolge sortieren
+        // Absteigende Sortierung überprüfen
+        assertEquals("Zootopia", homeController.observableMovies.get(0).getTitle());
+        assertEquals("Interstellar", homeController.observableMovies.get(1).getTitle());
+        assertEquals("Avatar", homeController.observableMovies.get(2).getTitle());
     }
+
 
     @Test
     void filter_movies_based_on_query() {
