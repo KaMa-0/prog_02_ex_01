@@ -96,18 +96,6 @@ public class HomeController implements Initializable {
         List<Movie> filteredList = new ArrayList<>(allMovies); //copy the original list to keep original list safe
         // Metin araması uygula
 
-        if (searchQuery != null && !searchQuery.isEmpty()) {
-            // Büyük-küçük harf duyarsız arama
-            filteredList = filteredList.stream() // we could also use foreach instead of stream API
-                    .filter(movie ->
-                            movie.getTitle().toLowerCase().contains(searchQuery) || //
-                            movie.getDescription().toLowerCase().contains(searchQuery))
-                    .collect(Collectors.toList());
-        }
-
-
-
-
         // Tür filtresi uygula
         if (selectedGenre != null && !selectedGenre.equals("No filter")) {
             try {
@@ -122,6 +110,15 @@ public class HomeController implements Initializable {
         } else {
             // wenn No filter gewählt wird, setzt es die komplette liste zurück
             filteredList = new ArrayList<>(allMovies);
+        }
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            // Büyük-küçük harf duyarsız arama
+            filteredList = filteredList.stream() // we could also use foreach instead of stream API
+                    .filter(movie ->
+                            movie.getTitle().toLowerCase().contains(searchQuery) || //
+                                    movie.getDescription().toLowerCase().contains(searchQuery))
+                    .collect(Collectors.toList());
         }
 
         // 🔹 DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
