@@ -1,6 +1,6 @@
-at/ac/fhcampuswien/fhmdb/models/Movie.class
-at/ac/fhcampuswien/fhmdb/models/Genres.class
+at\ac\fhcampuswien\fhmdb\ui\MovieCell.class
+at\ac\fhcampuswien\fhmdb\models\Genres.class
 module-info.class
-at/ac/fhcampuswien/fhmdb/FhmdbApplication.class
-at/ac/fhcampuswien/fhmdb/ui/MovieCell.class
-at/ac/fhcampuswien/fhmdb/HomeController.class
+at\ac\fhcampuswien\fhmdb\models\Movie.class
+at\ac\fhcampuswien\fhmdb\HomeController.class
+at\ac\fhcampuswien\fhmdb\FhmdbApplication.class

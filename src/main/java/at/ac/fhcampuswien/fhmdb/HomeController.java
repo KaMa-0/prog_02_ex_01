@@ -94,9 +94,8 @@ public class HomeController implements Initializable {
     private void filterMovies(String searchQuery, String selectedGenre) {
 
         List<Movie> filteredList = new ArrayList<>(allMovies); //copy the original list to keep original list safe
-        // Metin araması uygula
 
-        // Tür filtresi uygula
+        // Filter by genre
         if (selectedGenre != null && !selectedGenre.equals("No filter")) {
             try {
                 Genres genre = Genres.valueOf(selectedGenre);
@@ -104,7 +103,7 @@ public class HomeController implements Initializable {
                         .filter(movie -> movie.getGenres().contains(genre))
                         .collect(Collectors.toList());
             } catch (IllegalArgumentException e) {
-                // Geçersiz tür ismi
+                // Invalid genre
                 System.err.println("Invalid genre: " + selectedGenre);
             }
         } else {
@@ -113,7 +112,7 @@ public class HomeController implements Initializable {
         }
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            // Büyük-küçük harf duyarsız arama
+            // key-insensitive
             filteredList = filteredList.stream() // we could also use foreach instead of stream API
                     .filter(movie ->
                             movie.getTitle().toLowerCase().contains(searchQuery) || //
@@ -128,7 +127,6 @@ public class HomeController implements Initializable {
         observableMovies.clear();
         observableMovies.addAll(filteredList);
 
-        // UI'ı güncelle
         // 🔹 Setze `ListView` neu
         movieListView.setItems(null); // Verhindert falsche Einträge
         movieListView.setItems(observableMovies); // Setzt die Liste richtig
