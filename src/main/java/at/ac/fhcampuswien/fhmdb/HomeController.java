@@ -94,9 +94,8 @@ public class HomeController implements Initializable {
     private void filterMovies(String searchQuery, String selectedGenre) {
 
         List<Movie> filteredList = new ArrayList<>(allMovies); //copy the original list to keep original list safe
-        List<Movie> result = new ArrayList<>();
         // Metin araması uygula
-        /*
+
         if (searchQuery != null && !searchQuery.isEmpty()) {
             // Büyük-küçük harf duyarsız arama
             filteredList = filteredList.stream() // we could also use foreach instead of stream API
@@ -105,18 +104,12 @@ public class HomeController implements Initializable {
                             movie.getDescription().toLowerCase().contains(searchQuery))
                     .collect(Collectors.toList());
         }
-         */
 
-        for (Movie movie: filteredList) {
-            if (movie.getTitle().toLowerCase().contains(searchQuery) || movie.getDescription().toLowerCase().contains(searchQuery)) {
-                result.add(movie);
-            }
-        }
-        filteredList = result;
+
 
 
         // Tür filtresi uygula
-        if (selectedGenre != null && !selectedGenre.equals("No Filter")) {
+        if (selectedGenre != null && !selectedGenre.equals("No filter")) {
             try {
                 Genres genre = Genres.valueOf(selectedGenre);
                 filteredList = filteredList.stream()
@@ -126,10 +119,29 @@ public class HomeController implements Initializable {
                 // Geçersiz tür ismi
                 System.err.println("Invalid genre: " + selectedGenre);
             }
+        } else {
+            // wenn No filter gewählt wird, setzt es die komplette liste zurück
+            filteredList = new ArrayList<>(allMovies);
         }
 
-        // UI'ı güncelle
+        // 🔹 DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
+        System.out.println("Gefilterte Liste Größe: " + filteredList.size());
+
+        // 🔹 Fix für doppelte oder falsche Einträge
         observableMovies.clear();
         observableMovies.addAll(filteredList);
+
+        // UI'ı güncelle
+        // 🔹 Setze `ListView` neu
+        movieListView.setItems(null); // Verhindert falsche Einträge
+        movieListView.setItems(observableMovies); // Setzt die Liste richtig
+
+
+        // 🔹 DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
+        System.out.println("Gefilterte Liste Größe: " + filteredList.size());
+
+        // 🔹 DEBUGGING – Prüfen, ob `observableMovies` richtig aktualisiert wurde
+        System.out.println("observableMovies Größe nach Update: " + observableMovies.size());
     }
+
 }
