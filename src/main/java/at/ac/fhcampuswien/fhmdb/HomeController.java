@@ -40,6 +40,7 @@ public class HomeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         observableMovies.addAll(allMovies);         // add dummy data to observable list
+        sortMovies(true);
 
         // initialize UI stuff
         movieListView.setItems(observableMovies);   // set data of observable list to list view
