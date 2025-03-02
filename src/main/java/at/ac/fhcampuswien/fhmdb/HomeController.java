@@ -35,7 +35,7 @@ public class HomeController implements Initializable {
 
     public List<Movie> allMovies = Movie.initializeMovies();
 
-    private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
+    protected ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -82,7 +82,7 @@ public class HomeController implements Initializable {
 
     }
 
-    private void sortMovies(boolean ascendingOrder) {
+    public void sortMovies(boolean ascendingOrder) {
         Comparator<Movie> movieComparator = Comparator.comparing(Movie::getTitle);
         if (ascendingOrder) {
             observableMovies.sort(movieComparator);
