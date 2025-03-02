@@ -59,4 +59,23 @@ class HomeControllerTest {
 
         assertEquals(expected, homeController.observableMovies);
     }
+
+    @Test
+    void filter_movies_based_on_query() {
+
+    }
+
+    @Test
+    void filter_movies_based_on_genre() {
+
+    }
+
+    @Test
+    void filter_movies_based_on_query_nothing_found() {
+    }
+
+    @Test
+    void no_filter_return_all_movies() {
+
+    }
 }
