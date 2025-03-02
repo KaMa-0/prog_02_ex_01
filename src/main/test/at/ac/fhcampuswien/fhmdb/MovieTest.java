@@ -12,33 +12,33 @@ import static org.junit.jupiter.api.Assertions.*;
 class MovieTest {
 
     @Test
-    void movieShouldHaveTitle() {
+    void movie_should_have_title() {
         Movie movie = new Movie("Interstellar", "A space adventure", Arrays.asList(Genres.SCIENCE_FICTION));
         assertEquals("Interstellar", movie.getTitle());
     }
 
     @Test
-    void movieShouldHaveDescription() {
+    void movie_should_have_description() {
         Movie movie = new Movie("Interstellar", "A space adventure", Arrays.asList(Genres.SCIENCE_FICTION));
         assertEquals("A space adventure", movie.getDescription());
     }
 
     @Test
-    void movieShouldHaveGenres() {
+    void movie_should_have_genres() {
         Movie movie = new Movie("Interstellar", "A space adventure", Arrays.asList(Genres.SCIENCE_FICTION, Genres.DRAMA));
         List<Genres> expectedGenres = Arrays.asList(Genres.SCIENCE_FICTION, Genres.DRAMA);
         assertEquals(expectedGenres, movie.getGenres());
     }
 
     @Test
-    void initializeMoviesShouldCreateMovies() {
+    void initialize_movies_should_create_movies() {
         List<Movie> movies = Movie.initializeMovies();
         assertNotNull(movies);
         assertEquals(3, movies.size());
     }
 
     @Test
-    void initializeMoviesShouldHaveCorrectTitles() {
+    void initialize_movies_should_have_correct_titles() {
         List<Movie> movies = Movie.initializeMovies();
         assertEquals("Finding Nemo", movies.get(0).getTitle());
         assertEquals("Forrest Gump", movies.get(1).getTitle());
