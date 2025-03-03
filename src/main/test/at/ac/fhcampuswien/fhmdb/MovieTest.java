@@ -34,7 +34,7 @@ class MovieTest {
     void initialize_movies_should_create_movies() {
         List<Movie> movies = Movie.initializeMovies();
         assertNotNull(movies);
-        assertEquals(3, movies.size());
+        assertEquals(13, movies.size());
     }
 
     @Test
