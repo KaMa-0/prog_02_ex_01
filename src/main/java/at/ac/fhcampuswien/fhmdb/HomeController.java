@@ -57,22 +57,32 @@ public class HomeController implements Initializable {
 
         // Filter Button Pressed
         searchBtn.setOnAction(actionEvent -> {
-            String searchQuery = searchField.getText().toLowerCase();
+            String searchQuery = searchField.getText();
+                                                            // this section checks for null* exception and sets value to null
             String selectedGenre = genreComboBox.getValue() != null ? genreComboBox.getValue().toString() : null;
-            filterMovies(searchQuery, selectedGenre);
+            List<Movie> filteredList = filterMovies(searchQuery, selectedGenre);
+
+            // Fix für doppelte oder falsche Einträge
+            observableMovies.clear();
+            observableMovies.addAll(filteredList);
+
+            // Setze `ListView` neu
+            movieListView.setItems(null); // Verhindert falsche Einträge
+            movieListView.setItems(observableMovies); // Setzt die Liste richtig
+
         });
 
         // Sort Button Pressed
         sortBtn.setOnAction(actionEvent -> {
             boolean ascendingOrder;
             if (sortBtn.getText().equals("Sort (asc)")) {
-                // TODO sort observableMovies ascending
-                sortBtn.setText("Sort (desc)");
-                ascendingOrder = false;
+                // switch to descending order
+                sortBtn.setText("Sort (desc)"); //update button text
+                ascendingOrder = false; // descending order
             } else {
-                // TODO sort observableMovies descending
-                sortBtn.setText("Sort (asc)");
-                ascendingOrder = true;
+                // switch to ascending order
+                sortBtn.setText("Sort (asc)"); // update button text
+                ascendingOrder = true; // ascending order
             }
 
             sortMovies(ascendingOrder);
@@ -82,15 +92,15 @@ public class HomeController implements Initializable {
     }
 
     public void sortMovies(boolean ascendingOrder) {
-        Comparator<Movie> movieComparator = Comparator.comparing(Movie::getTitle);
+        Comparator<Movie> movieComparator = Comparator.comparing(Movie::getTitle); // compare Movie objs based on title
         if (ascendingOrder) {
-            observableMovies.sort(movieComparator);
+            observableMovies.sort(movieComparator); //ascending
         } else {
-            observableMovies.sort(movieComparator.reversed());
+            observableMovies.sort(movieComparator.reversed()); //descending
         }
     }
 
-    public void filterMovies(String searchQuery, String selectedGenre) {
+    public List<Movie> filterMovies(String searchQuery, String selectedGenre) {
         List<Movie> filteredList = new ArrayList<>(allMovies); //copy the original list to keep original list safe
         // Filter by genre
         if (selectedGenre != null && !selectedGenre.equals("No filter")) {
@@ -115,19 +125,12 @@ public class HomeController implements Initializable {
         // DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
         System.out.println("Gefilterte Liste Größe: " + filteredList.size());
 
-        // Fix für doppelte oder falsche Einträge
-        observableMovies.clear();
-        observableMovies.addAll(filteredList);
-
-        // Setze `ListView` neu
-        movieListView.setItems(null); // Verhindert falsche Einträge
-        movieListView.setItems(observableMovies); // Setzt die Liste richtig
-
         // DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
         System.out.println("Gefilterte Liste Größe: " + filteredList.size());
 
         // DEBUGGING – Prüfen, ob observableMovies richtig aktualisiert wurde
         System.out.println("observableMovies Größe nach Update: " + observableMovies.size());
+        return filteredList;
     }
 
 }

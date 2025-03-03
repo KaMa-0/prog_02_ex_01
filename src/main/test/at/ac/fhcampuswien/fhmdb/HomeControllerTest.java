@@ -55,15 +55,8 @@ class HomeControllerTest {
 
     @Test
     void filter_movies_by_title() {
-        //We are using manuel filtering in the tests because the filterMovies method updates UI components movieListView.setItems, which
-        //causes NullPointerException in the test environment since moveListView is null.
         String searchQuery = "ava";
-        List<Movie> filteredList = homeController.allMovies.stream()
-                .filter(movie -> movie.getTitle().toLowerCase().contains(searchQuery.toLowerCase()) ||
-                        movie.getDescription().toLowerCase().contains(searchQuery.toLowerCase()))
-                .collect(Collectors.toList());
-        //Creates a new empty ObservableList, because in actual code it's connected to UI
-        //Populates it with the filtered results
+        List<Movie> filteredList = homeController.filterMovies(searchQuery, null);
         homeController.observableMovies = FXCollections.observableArrayList();
         homeController.observableMovies.addAll(filteredList);
         // check results
@@ -73,13 +66,9 @@ class HomeControllerTest {
     @Test
     void filter_movies_based_on_genre() {
         String selectedGenre = "ANIMATION";
-        List<Movie> filteredList = homeController.allMovies.stream()
-                .filter(movie -> movie.getGenres().contains(Genres.valueOf(selectedGenre)))
-                .collect(Collectors.toList());
-
         homeController.observableMovies = FXCollections.observableArrayList();
+        List<Movie> filteredList = homeController.filterMovies(null, selectedGenre);
         homeController.observableMovies.addAll(filteredList);
-
         assertEquals(2, homeController.observableMovies.size());
         assertEquals("Zootopia", homeController.observableMovies.get(0).getTitle());
         assertEquals("Avatar", homeController.observableMovies.get(1).getTitle());
@@ -88,17 +77,10 @@ class HomeControllerTest {
     @Test
     void filter_movies_based_on_query_nothing_found() {
         // search for text that doesn't exist
-        String searchQuery = "nonexistent";
-        List<Movie> filteredList = homeController.allMovies.stream()
-                .filter(movie -> movie.getTitle().toLowerCase().contains(searchQuery.toLowerCase()) ||
-                        movie.getDescription().toLowerCase().contains(searchQuery.toLowerCase()))
-                .collect(Collectors.toList());
-
+        String searchQuery = "nonexistent_abcs123";
         homeController.observableMovies = FXCollections.observableArrayList();
+        List<Movie> filteredList = homeController.filterMovies(searchQuery, null);
         homeController.observableMovies.addAll(filteredList);
-
-        // check for empty list
-        assertEquals(0, homeController.observableMovies.size());
         assertTrue(homeController.observableMovies.isEmpty());
     }
 
@@ -107,7 +89,7 @@ class HomeControllerTest {
         // empty filter
         String searchQuery = "";
         String selectedGenre = "No filter";
-        List<Movie> filteredList = new ArrayList<>(homeController.allMovies);
+        List<Movie> filteredList = homeController.filterMovies(searchQuery, selectedGenre);
         homeController.observableMovies = FXCollections.observableArrayList();
         homeController.observableMovies.addAll(filteredList);
         // check if all the films are listed
