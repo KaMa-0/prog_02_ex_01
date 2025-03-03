@@ -24,9 +24,9 @@ class HomeControllerTest {
         homeController = new HomeController();
         // 3 dummy movies
         homeController.allMovies = List.of(
-                new Movie("Zootopia", "A city of animals", List.of()),
-                new Movie("Interstellar", "A space adventure", List.of()),
-                new Movie("Avatar", "A marine on an alien planet", List.of())
+                new Movie("Zootopia", "A city of animals", List.of(Genres.ANIMATION, Genres.FAMILY)),
+                new Movie("Interstellar", "A space adventure", List.of(Genres.THRILLER, Genres.SCIENCE_FICTION)),
+                new Movie("Avatar", "A marine on an alien planet", List.of(Genres.ANIMATION, Genres.ADVENTURE))
         );
         // Filme zu Liste hinzufügen
         homeController.observableMovies.addAll(homeController.allMovies);
@@ -55,13 +55,6 @@ class HomeControllerTest {
 
     @Test
     void filter_movies_by_title() {
-        //HomeController homeController = new HomeController();
-        // Data for testing
-        homeController.allMovies = List.of(
-                new Movie("Avatar", "Science Fiction film", List.of(Genres.SCIENCE_FICTION, Genres.ACTION)),
-                new Movie("Interstellar", "Space exploration film", List.of(Genres.SCIENCE_FICTION, Genres.ADVENTURE)),
-                new Movie("Zootopia", "Animated film", List.of(Genres.ANIMATION, Genres.COMEDY))
-        );
         //We are using manuel filtering in the tests because the filterMovies method updates UI components movieListView.setItems, which
         //causes NullPointerException in the test environment since moveListView is null.
         String searchQuery = "ava";
@@ -79,14 +72,6 @@ class HomeControllerTest {
     }
     @Test
     void filter_movies_based_on_genre() {
-        //HomeController homeController = new HomeController();
-
-        homeController.allMovies = List.of(
-                new Movie("Avatar", "Science Fiction film", List.of(Genres.SCIENCE_FICTION, Genres.ACTION)),
-                new Movie("Interstellar", "Space exploration film", List.of(Genres.SCIENCE_FICTION, Genres.ADVENTURE)),
-                new Movie("Zootopia", "Animated film", List.of(Genres.ANIMATION, Genres.COMEDY))
-        );
-
         String selectedGenre = "ANIMATION";
         List<Movie> filteredList = homeController.allMovies.stream()
                 .filter(movie -> movie.getGenres().contains(Genres.valueOf(selectedGenre)))
@@ -95,19 +80,13 @@ class HomeControllerTest {
         homeController.observableMovies = FXCollections.observableArrayList();
         homeController.observableMovies.addAll(filteredList);
 
-        assertEquals(1, homeController.observableMovies.size());
+        assertEquals(2, homeController.observableMovies.size());
         assertEquals("Zootopia", homeController.observableMovies.get(0).getTitle());
+        assertEquals("Avatar", homeController.observableMovies.get(1).getTitle());
     }
 
     @Test
     void filter_movies_based_on_query_nothing_found() {
-        //HomeController homeController = new HomeController();
-        homeController.allMovies = List.of(
-                new Movie("Avatar", "Science Fiction film", List.of(Genres.SCIENCE_FICTION, Genres.ACTION)),
-                new Movie("Interstellar", "Space exploration film", List.of(Genres.SCIENCE_FICTION, Genres.ADVENTURE)),
-                new Movie("Zootopia", "Animated film", List.of(Genres.ANIMATION, Genres.COMEDY))
-        );
-
         // search for text that doesn't exist
         String searchQuery = "nonexistent";
         List<Movie> filteredList = homeController.allMovies.stream()
@@ -125,12 +104,6 @@ class HomeControllerTest {
 
     @Test
     void no_filter_return_all_movies() {
-        //HomeController homeController = new HomeController();
-        homeController.allMovies = List.of(
-                new Movie("Avatar", "Science Fiction film", List.of(Genres.SCIENCE_FICTION, Genres.ACTION)),
-                new Movie("Interstellar", "Space exploration film", List.of(Genres.SCIENCE_FICTION, Genres.ADVENTURE)),
-                new Movie("Zootopia", "Animated film", List.of(Genres.ANIMATION, Genres.COMEDY))
-        );
         // empty filter
         String searchQuery = "";
         String selectedGenre = "No filter";
@@ -139,8 +112,8 @@ class HomeControllerTest {
         homeController.observableMovies.addAll(filteredList);
         // check if all the films are listed
         assertEquals(3, homeController.observableMovies.size());
-        assertEquals("Avatar", homeController.observableMovies.get(0).getTitle());
+        assertEquals("Zootopia", homeController.observableMovies.get(0).getTitle());
         assertEquals("Interstellar", homeController.observableMovies.get(1).getTitle());
-        assertEquals("Zootopia", homeController.observableMovies.get(2).getTitle());
+        assertEquals("Avatar", homeController.observableMovies.get(2).getTitle());
     }
 }
