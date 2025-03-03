@@ -94,9 +94,7 @@ public class HomeController implements Initializable {
     private void filterMovies(String searchQuery, String selectedGenre) {
 
         List<Movie> filteredList = new ArrayList<>(allMovies); //copy the original list to keep original list safe
-        // Metin araması uygula
 
-        // Tür filtresi uygula
         if (selectedGenre != null && !selectedGenre.equals("No filter")) {
             try {
                 Genres genre = Genres.valueOf(selectedGenre);
@@ -104,7 +102,6 @@ public class HomeController implements Initializable {
                         .filter(movie -> movie.getGenres().contains(genre))
                         .collect(Collectors.toList());
             } catch (IllegalArgumentException e) {
-                // Geçersiz tür ismi
                 System.err.println("Invalid genre: " + selectedGenre);
             }
         } else {
@@ -113,7 +110,6 @@ public class HomeController implements Initializable {
         }
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            // Büyük-küçük harf duyarsız arama
             filteredList = filteredList.stream() // we could also use foreach instead of stream API
                     .filter(movie ->
                             movie.getTitle().toLowerCase().contains(searchQuery) || //
@@ -121,23 +117,22 @@ public class HomeController implements Initializable {
                     .collect(Collectors.toList());
         }
 
-        // 🔹 DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
+        // DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
         System.out.println("Gefilterte Liste Größe: " + filteredList.size());
 
-        // 🔹 Fix für doppelte oder falsche Einträge
+        // Fix für doppelte oder falsche Einträge
         observableMovies.clear();
         observableMovies.addAll(filteredList);
 
-        // UI'ı güncelle
-        // 🔹 Setze `ListView` neu
+        // Setze `ListView` neu
         movieListView.setItems(null); // Verhindert falsche Einträge
         movieListView.setItems(observableMovies); // Setzt die Liste richtig
 
 
-        // 🔹 DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
+        // DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
         System.out.println("Gefilterte Liste Größe: " + filteredList.size());
 
-        // 🔹 DEBUGGING – Prüfen, ob `observableMovies` richtig aktualisiert wurde
+        // DEBUGGING – Prüfen, ob `observableMovies` richtig aktualisiert wurde
         System.out.println("observableMovies Größe nach Update: " + observableMovies.size());
     }
 
