@@ -59,6 +59,7 @@ public class HomeController implements Initializable {
         searchBtn.setOnAction(actionEvent -> {
             String searchQuery = searchField.getText().toLowerCase();
             String selectedGenre = genreComboBox.getValue() != null ? genreComboBox.getValue().toString() : null;
+
             filterMovies(searchQuery, selectedGenre);
         });
 
@@ -90,9 +91,12 @@ public class HomeController implements Initializable {
         }
     }
 
-    public void filterMovies(String searchQuery, String selectedGenre) {
+    private void filterMovies(String searchQuery, String selectedGenre) {
+
         List<Movie> filteredList = new ArrayList<>(allMovies); //copy the original list to keep original list safe
-        // Filter by genre
+        // Metin araması uygula
+
+        // Tür filtresi uygula
         if (selectedGenre != null && !selectedGenre.equals("No filter")) {
             try {
                 Genres genre = Genres.valueOf(selectedGenre);
@@ -100,28 +104,39 @@ public class HomeController implements Initializable {
                         .filter(movie -> movie.getGenres().contains(genre))
                         .collect(Collectors.toList());
             } catch (IllegalArgumentException e) {
-                // Invalid genre
+                // Geçersiz tür ismi
                 System.err.println("Invalid genre: " + selectedGenre);
             }
+        } else {
+            // wenn No filter gewählt wird, setzt es die komplette liste zurück
+            filteredList = new ArrayList<>(allMovies);
         }
+
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            // key-insensitive
+            // Büyük-küçük harf duyarsız arama
             filteredList = filteredList.stream() // we could also use foreach instead of stream API
                     .filter(movie ->
-                            movie.getTitle().toLowerCase().contains(searchQuery) ||
+                            movie.getTitle().toLowerCase().contains(searchQuery) || //
                                     movie.getDescription().toLowerCase().contains(searchQuery))
                     .collect(Collectors.toList());
         }
+
         // 🔹 DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
         System.out.println("Gefilterte Liste Größe: " + filteredList.size());
+
         // 🔹 Fix für doppelte oder falsche Einträge
         observableMovies.clear();
         observableMovies.addAll(filteredList);
+
+        // UI'ı güncelle
         // 🔹 Setze `ListView` neu
         movieListView.setItems(null); // Verhindert falsche Einträge
         movieListView.setItems(observableMovies); // Setzt die Liste richtig
+
+
         // 🔹 DEBUGGING – Ausgabe der gefilterten Liste vor dem Setzen
         System.out.println("Gefilterte Liste Größe: " + filteredList.size());
+
         // 🔹 DEBUGGING – Prüfen, ob `observableMovies` richtig aktualisiert wurde
         System.out.println("observableMovies Größe nach Update: " + observableMovies.size());
     }
